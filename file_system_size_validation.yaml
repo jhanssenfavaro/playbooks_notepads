@@ -1,4 +1,4 @@
-- name: Prerequisite validations
+- name: Prerequisite validation
   hosts: localhost
   tags: prerequisite
   tasks:
