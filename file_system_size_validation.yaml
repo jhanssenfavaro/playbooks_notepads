@@ -1,0 +1,16 @@
+- name: Prerequisite validations
+  hosts: localhost
+  tags: prerequisite
+  tasks:
+    - name: Getting opt file system size
+      set_fact:
+        optDetails: "{{ ansible_mounts | selectattr('mount','equalto', '/opt') | list | first }}"
+
+    - name: Setting fact with free space to opt
+      set_fact:
+        optMountFreeSpaceGB: "{{ (optDetails['size_available'] / 1024 / 1024 / 1024)|round|int }}"
+
+    - name: Fail case 20 GB not available to opt
+      fail:
+        msg: "Tamanho minimo do FS /opt nao suficiente para instalacao"
+      when: (optMountFreeSpaceGB|int < 20)
